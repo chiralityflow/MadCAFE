@@ -3594,8 +3594,11 @@ class HelasMatrixElement(base_objects.PhysicsObject):
         """A function to update the vertex id if chiral LL or RR vertex"""
         # First sort the ids (fermions before boson in QED)
         # TODO: Update this when we have new pdg_codes convention with e.g. left < right
-        pdg_codes.sort()
-        
+        boson_codes = [x for x in pdg_codes if abs(x) % 100 > 20]
+        fermion_codes = [x for x in pdg_codes if abs(x) % 100 < 20]
+        boson_codes.sort()
+        fermion_codes.sort()
+        pdg_codes = fermion_codes + boson_codes
         # If not all-outgoing, then we have an LL or RR vertex
         if not pdg_codes[0]*pdg_codes[1] < 0:
             # change to all outgoing particles
@@ -3604,7 +3607,6 @@ class HelasMatrixElement(base_objects.PhysicsObject):
             # Get new vertex id
             vertex.set('id', list(vert_id_to_pdgs_dict.keys())\
                 [list(vert_id_to_pdgs_dict.values()).index(pdg_codes)])
-        
         return vertex
 
     def sign(self,x):
@@ -3648,7 +3650,8 @@ class HelasMatrixElement(base_objects.PhysicsObject):
 
             # get fermion name and chirality
             part_name = ext_wfs[ext_nums[ipart]].get('name')
-            if part_name[0] == 'v':
+            misc.sprint('Particle is named %s' % part_name)
+            if part_name[0] == 'v': # neutrino
                 leptonDict = {"e": "e", "m": "mu", "t": "tau"}
                 invChiDict = {"l": "r", "r": "l"}
                 bosonDict = {"+": "-", "-": "+"}

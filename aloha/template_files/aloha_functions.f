@@ -202,6 +202,369 @@ c endif for if massive or not
       end
 c
 
+      subroutine vpxxxx(p,vmass,nhel,nsv,q,vcl)
+c
+c This subroutine computes a positively polarised VECTOR wavefunction.
+c
+c input:
+c       real    p(0:3)         : four-momentum of vector boson
+c       real    vmass          : mass          of vector boson
+c       integer nhel = -1, 0, 1: helicity      of vector boson
+c                                (0 is forbidden if vmass=0.0)
+c       integer nsv  = -1 or 1 : +1 for final, -1 for initial
+c       real    q(0:3)         : four-momentum of reference vector
+c
+c output:
+c       complex vcl(6)          : vector wavefunction    |pfl]<q|/<q pfl>
+c
+      implicit none
+      double complex vcl(6), pketsq(2), qbraan(2), qpprod, invQPprod, ic
+      double precision p(0:3),vmass,hel,hel0,pt,pt2,pp,pzpt,emp,sqh,q(0:3),sqp0p3,sqq0q3, svhel,sv, alpha, pfl(0:3), pflRot(0:3), qLoc(0:3)
+      integer nhel,nsv,nsvahl,nsvhel, i
+
+      double precision rZero, rHalf, rOne, rTwo, rHalfSqH,rPosPrefac, rNegPrefac
+      parameter( rZero = 0.0d0, rHalf = 0.5d0 )
+      parameter( rOne = 1.0d0, rTwo = 2.0d0 )
+
+      sqh = dsqrt(rHalf)
+      rHalfSqH = rHalf*sqh
+      hel = dble(nhel)
+      nsvhel = nsv*nhel
+      ic = dcmplx(0.0d0,1.0d0)
+      rPosPrefac = dsqrt(rHalf + rHalfSqH)
+      rNegPrefac = dsqrt(rHalf - rHalfSqH)
+
+
+      if (vmass.eq.rZero) then 
+         call vlxxxx(p,vmass,nhel,nsv,q,vcl)
+         return
+      endif
+
+      ! qLoc(0:3) = q(0:3)
+c ZW: hard-coding helicity basis for now
+      qLoc(0) = p(0)
+      qLoc(1:3) = -1.0d0*p(1:3)
+
+      alpha = rHalf*(vmass**2)/(p(0)*qLoc(0) - p(1)*qLoc(1) - p(2)*qLoc(2) - p(3)*qLoc(3))
+
+      vcl(1) = dcmplx(p(0),p(3))*nsv
+      vcl(2) = dcmplx(p(1),p(2))*nsv
+
+c first calculate pflat from physical momentum p and spin-axis q
+      pfl(0) = p(0) - alpha*qLoc(0)
+      pfl(1) = p(1) - alpha*qLoc(1)
+      pfl(2) = p(2) - alpha*qLoc(2)
+      pfl(3) = p(3) - alpha*qLoc(3)
+
+! c now rotate pflat along the x-axis to avoid singularities along the z-axis
+!       pflRot(0) = pfl(0)
+!       pflRot(1) = pfl(1)
+!       pflRot(2) = sqh*pfl(2) - sqh*pfl(3)
+!       pflRot(3) = sqh*pfl(2) + sqh*pfl(3)
+c ZW: no rotation for now, do not use initial state vector bosons
+      pflRot(0:3) = pfl(0:3)
+
+c get spinors such that vector wavefunction is |p]<r|/<rp>
+c pketsq = |p] = (ptransconj/sqp0p3, -sqp0p3)
+c qbraan = <q| = (qtrans/sqr0r3, -sqr0q3)
+c qpprod = <qp>
+
+         if(pflRot(1).eq.0d0.and.pflRot(2).eq.0d0.and.pflRot(3).lt.0d0) then
+            sqp0p3 = 0d0
+         else
+            sqp0p3 = dsqrt(max(pflRot(0)+pflRot(3),rZero))
+         endif
+         pketsq(2) = dcmplx( - sqp0p3 )
+         if(qLoc(1).eq.0d0.and.qLoc(2).eq.0d0.and.qLoc(3).lt.0d0) then
+            sqq0q3 = 0d0
+         else
+            sqq0q3 = dsqrt(max(qLoc(0)+qLoc(3),rZero))
+         endif
+         qbraan(2) = dcmplx ( - sqq0q3 )
+
+c nsvhel = 1, i.e. left-chiral (outgoing + hel or incoming - hel)
+         if ( nsvhel.eq.1 ) then
+            if ( sqp0p3.eq.rZero ) then
+               pketsq(1) = dcmplx( dsqrt(rTwo*pflRot(0)) )
+            else
+               pketsq(1) = dcmplx(p(1),-1*pflRot(2))/sqp0p3
+            endif
+            if ( sqq0q3.eq.rZero ) then
+               qbraan(1) = dcmplx( dsqrt(rTwo*qLoc(0)) )
+            else
+               qbraan(1) = dcmplx(qLoc(1),qLoc(2))/sqq0q3
+            endif
+         
+c           qpprod = <q pb> = qbraan*pketan (= <q pbRot>)         
+            qpprod = qbraan(2)*dconjg(pketsq(1)) - qbraan(1)*dconjg(pketsq(2))
+            invQPprod = rOne/qpprod
+
+c           rpprod = <rp> = rbraan*pketan
+c           pketan = |p> = (eps_{ab}|p]^b)^\dagger = (0 & -1)  (pketsq(1)^*) = (-pketsq(2)^*)
+c                                                    (1 &  0)  (pketsq(2)^*)   ( pketsq(1)^*)
+
+c           ZW: setting square ket components, EXcluding rotation back to pfl
+            ! vcl(3) = (rPosPrefac*pketsq(1) + ic*rNegPrefac*pketsq(2))*invQPprod
+            ! vcl(4) = (rPosPrefac*pketsq(2) + ic*rNegPrefac*pketsq(1))*invQPprod
+            vcl(3) = pketsq(1)*invQPprod
+            vcl(4) = pketsq(2)*invQPprod
+            vcl(5) = qbraan(1)
+            vcl(6) = qbraan(2)
+         
+c nsvhel = -1, i.e. right-chiral (outgoing - hel or incoming + hel)
+         else
+            vcl(3) = dcmplx(rZero)
+            vcl(4) = dcmplx(rZero)
+            vcl(5) = dcmplx(rZero)
+            vcl(6) = dcmplx(rZero)
+         endif
+c
+      return
+      end
+
+
+      subroutine vmxxxx(p,vmass,nhel,nsv,q,vcr)
+c
+c This subroutine computes a negatively polarised VECTOR wavefunction.
+c
+c input:
+c       real    p(0:3)         : four-momentum of vector boson
+c       real    vmass          : mass          of vector boson
+c       integer nhel = -1, 0, 1: helicity      of vector boson
+c                                (0 is forbidden if vmass=0.0)
+c       integer nsv  = -1 or 1 : +1 for final, -1 for initial
+c       real    r(0:3)         : four-momentum of reference vector
+c
+c output:
+c       complex vcr(6)          : vector wavefunction       |r]<p|/[pr]
+c
+      implicit none
+      double complex vcr(6), qketsq(2), pbraan(2), pqprod, invPQprod, ic
+      double precision p(0:3),vmass,hel,hel0,pzpt,emp,sqh,q(0:3),sqp0p3,sqq0q3, alpha, pfl(0:3), pflRot(0:3), qLoc(0:3)
+      integer nhel,nsv,nsvahl,nsvhel,i
+      double precision invMass
+
+      double precision rZero, rHalf, rOne, rTwo, rHalfSqH,rPosPrefac, rNegPrefac
+      parameter( rZero = 0.0d0, rHalf = 0.5d0 )
+      parameter( rOne = 1.0d0, rTwo = 2.0d0 )
+
+      sqh = dsqrt(rHalf)
+      rHalfSqH = rHalf*sqh
+      hel = dble(nhel)
+      nsvhel = nsv*nhel
+      ic = dcmplx(0.0d0,1.0d0)
+      rPosPrefac = dsqrt(rHalf + rHalfSqH)
+      rNegPrefac = dsqrt(rHalf - rHalfSqH)
+
+      if (vmass.eq.rZero) then 
+         call vrxxxx(p,vmass,nhel,nsv,q,vcr)
+         return
+      endif
+
+      ! qLoc(0:3) = q(0:3)
+c ZW: hard-coding helcity basis for now
+      qLoc(0) = p(0)
+      qLoc(1:3) = -1.0d0*p(1:3)
+
+      alpha = rHalf*(vmass**2)/(p(0)*qLoc(0) - p(1)*qLoc(1) - p(2)*qLoc(2) - p(3)*qLoc(3))
+
+
+      vcr(1) = dcmplx(p(0),p(3))*nsv
+      vcr(2) = dcmplx(p(1),p(2))*nsv
+
+
+      ! if ( vmass.ne.rZero ) then
+
+      !    write(*,*) '---------------------------------------------'
+      !    write(*,*) 'Error!!! No chiral massive bosons yet!!!!!!!!'
+      !    write(*,*) '---------------------------------------------'
+      !    vcr(3:6) = dcmplx(rZero)
+
+      ! else
+
+c first calculate pflat from physical momentum p and spin-axis q
+      pfl(0) = p(0) - alpha*qLoc(0)
+      pfl(1) = p(1) - alpha*qLoc(1)
+      pfl(2) = p(2) - alpha*qLoc(2)
+      pfl(3) = p(3) - alpha*qLoc(3)
+! c now rotate pflat along the x-axis to avoid singularities along the z-axis
+!       pflRot(0) = pfl(0)
+!       pflRot(1) = pfl(1)
+!       pflRot(2) = sqh*pfl(2) - sqh*pfl(3)
+!       pflRot(3) = sqh*pfl(2) + sqh*pfl(3)
+c ZW: no rotation for now, do not use initial state vector bosons
+      pflRot(0:3) = pfl(0:3)
+
+c get spinors such that vector wavefunction is |r]<p|/[pr]
+c qketsq = |q] = (qtransconj/sqr0q3, -sqr0q3)
+c pbraan = <p| = (ptrans/sqp0p3, -sqp0p3)
+c prprod = [pq]
+
+         if(pflRot(1).eq.0d0.and.pflRot(2).eq.0d0.and.pflRot(3).lt.0d0) then
+            sqp0p3 = 0d0
+         else
+            sqp0p3 = dsqrt(max(pflRot(0)+pflRot(3),rZero))
+         endif
+         pbraan(2) = dcmplx( - sqp0p3 )
+         if(qLoc(1).eq.0d0.and.qLoc(2).eq.0d0.and.qLoc(3).lt.0d0) then
+            sqq0q3 = 0d0
+         else
+            sqq0q3 = dsqrt(max(qLoc(0)+qLoc(3),rZero))
+         endif
+         qketsq(2) = dcmplx ( - sqq0q3 )
+
+c nsvhel = -1, i.e. right-chiral (outgoing - hel or incoming + hel)
+         if ( nsvhel.eq.-1 ) then
+            if ( sqp0p3.eq.rZero ) then
+               pbraan(1) = dcmplx( dsqrt(rTwo*pflRot(0)) )
+            else
+               pbraan(1) = dcmplx(pflRot(1),pflRot(2))/sqp0p3
+            endif
+            if ( sqq0q3.eq.rZero ) then
+               qketsq(1) = dcmplx( dsqrt(rTwo*qLoc(0)) )
+            else
+               qketsq(1) = dcmplx(qLoc(1),-1*qLoc(2))/sqq0q3
+            endif
+c           prprod = [pr] = pbrasq*rketsq
+c           pbrasq = [p| = (-<p|^a*eps_{ab})^\dagger = -(pbraan(1)^*, pbraan(2)^*) (0 & -1)   = (-pbraan(2)^*, pbraan(1)^*)
+c                                                                                  (1 &  0)     
+            pqprod = -conjg(pbraan(2))*qketsq(1) + conjg(pbraan(1))*qketsq(2)
+            invPQprod = rOne/pqprod
+            vcr(3) = qketsq(1)*dsqrt(rTwo)*invPQprod
+            vcr(4) = qketsq(2)*dsqr t(rTwo)*invPQprod
+            vcr(5) = pbraan(1)
+            vcr(6) = pbraan(2)
+         
+c nsvhel = 1, i.e. left-chiral (outgoing + hel or incoming - hel)
+         else
+            vcr(3) = dcmplx(rZero)
+            vcr(4) = dcmplx(rZero)
+            vcr(5) = dcmplx(rZero)
+            vcr(6) = dcmplx(rZero)
+         endif
+
+      return
+      end
+c
+
+
+      subroutine vzxxxx(p, vmass, nhel, nsv, q, vcz)
+c
+c This subroutine computes a longitudinally polarised VECTOR wavefunction.
+c
+c input:
+c       real    p(0:3)         : four-momentum of vector boson
+c       real    vmass          : mass          of vector boson
+c       integer nhel = -1, 0, 1: helicity      of vector boson
+c                                (0 is forbidden if vmass=0.0)
+c       integer nsv  = -1 or 1 : +1 for final, -1 for initial
+c       real    q(0:3)         : four-momentum of reference vector
+c
+c output:
+c       complex vcz(6)          : vector wavefunction    (|pfl] - a|q])(<pfl| - a<q)|/(sqrt(2)*m)
+c
+      implicit none
+      double complex vcz(6), pketsq(2), qketsq(2), pbraan(2), qbraan(2), ic
+      double precision p(0:3),vmass,invMass,hel,hel0,pzpt,emp,sqh,q(0:3),sqp0p3,sqq0q3, alpha, pfl(0:3), pflRot(0:3), qLoc(0:3)
+      integer nhel,nsv,nsvahl,nsvhel,i
+
+      double precision rZero, rHalf, rOne, rTwo, rHalfSqH,rPosPrefac, rNegPrefac
+      parameter( rZero = 0.0d0, rHalf = 0.5d0 )
+      parameter( rOne = 1.0d0, rTwo = 2.0d0 )
+
+      sqh = dsqrt(rHalf)
+      rHalfSqH = rHalf*sqh
+      hel = dble(nhel)
+      nsvhel = nsv*nhel
+      ic = dcmplx(0.0d0,1.0d0)
+      rPosPrefac = dsqrt(rHalf + rHalfSqH)
+      rNegPrefac = dsqrt(rHalf - rHalfSqH)
+
+      vcz(1) = dcmplx(p(0),p(3))*nsv
+      vcz(2) = dcmplx(p(1),p(2))*nsv
+
+      if( nsvhel.eq.-1 ) then
+         call vmxxxx(p,vmass,nhel,nsv,q,vcz)
+         return
+      else if ( nsvhel.eq.1 ) then
+         call vpxxxx(p,vmass,nhel,nsv,q,vcz)
+         return
+      else if ( vmass.ne.rZero ) then
+         write(*,*) '------------------------------------------------------------------'
+         write(*,*) 'Error!!! Massless boson cannot be longitudinally polarised!!!!!!!!'
+         write(*,*) '------------------------------------------------------------------'
+         vcz(3:6) = dcmplx(rZero)
+         return
+      endif
+
+      ! qLoc(0:3) = q(0:3)
+c ZW: hard-coding helcity basis for now
+      qLoc(0) = p(0)
+      qLoc(1:3) = -1.0d0*p(1:3)
+
+      alpha = rHalf*(vmass**2)/(p(0)*qLoc(0) - p(1)*qLoc(1) - p(2)*qLoc(2) - p(3)*qLoc(3))
+
+c first calculate pflat from physical momentum p and spin-axis q
+      pfl(0) = p(0) - alpha*qLoc(0)
+      pfl(1) = p(1) - alpha*qLoc(1)
+      pfl(2) = p(2) - alpha*qLoc(2)
+      pfl(3) = p(3) - alpha*qLoc(3)
+      ! c now rotate pflat along the x-axis to avoid singularities along the z-axis
+      !       pflRot(0) = pfl(0)
+      !       pflRot(1) = pfl(1)
+      !       pflRot(2) = sqh*pfl(2) - sqh*pfl(3)
+      !       pflRot(3) = sqh*pfl(2) + sqh*pfl(3)
+c ZW: no rotation for now, do not use initial state vector bosons
+      pflRot(0:3) = pfl(0:3)
+
+c get square kets |pfl] and |q] and angeled bras <pfl| and <q|
+c pketsq = |pfl] = (ptransconj/sqp0p3, -sqp0p3)
+c qketsq = |q] = (qtransconj/sqr0q3, -sqr0q3)
+
+      if(qLoc(1).eq.0d0.and.qLoc(2).eq.0d0.and.qLoc(3).lt.0d0) then
+         sqq0q3 = 0d0
+      else
+         sqq0q3 = dsqrt(max(qLoc(0)+qLoc(3),rZero))
+      endif
+      if(pflRot(1).eq.0d0.and.pflRot(2).eq.0d0.and.pflRot(3).lt.0d0) then
+         sqp0p3 = 0d0
+      else
+         sqp0p3 = dsqrt(max(pflRot(0)+pflRot(3),rZero))
+      endif
+      pketsq(2) = dcmplx ( - sqp0p3 )
+      qketsq(2) = dcmplx ( - sqq0q3 )
+      pbraan(2) = dcmplx( - sqp0p3 )
+      qbraan(2) = dcmplx( - sqq0q3 )
+      if ( sqp0p3.eq.rZero ) then
+         pketsq(1) = dcmplx( dsqrt(rTwo*pflRot(0)) )
+         pbraan(1) = dcmplx( dsqrt(rTwo*pflRot(0)) )
+      else
+         pketsq(1) = dcmplx(pflRot(1),-1*pflRot(2))/sqp0p3
+         pbraan(1) = dcmplx(pflRot(1),pflRot(2))/sqp0p3
+      endif
+      if ( sqq0q3.eq.rZero ) then
+         qketsq(1) = dcmplx( dsqrt(rTwo*qLoc(0)) )
+         qbraan(1) = dcmplx( dsqrt(rTwo*qLoc(0)) )
+      else
+         qketsq(1) = dcmplx(qLoc(1),-1*qLoc(2))/sqq0q3
+         qbraan(1) = dcmplx(qLoc(1),qLoc(2))/sqq0q3
+      endif
+
+c set up the vector boson wavefunction vcz
+c vcz = (|pfl] - a|q])(<pfl| - a<q|)/(sqrt(2)*m)
+c represented in  wavefunction form here as
+c vcz(3:4) = (pketsq(1:2) - alpha*qketsq(1:2))/(sqrt(2)*m)
+c vcz(5:6) = pbraan(1:2) - alpha*qbraan(1:2)
+      invMass = sqh/vmass
+      vcz(3) = (pketsq(1) - alpha*qketsq(1))*invMass
+      vcz(4) = (pketsq(2) - alpha*qketsq(2))*invMass
+      vcz(5) = pbraan(1) - alpha*qbraan(1)
+      vcz(6) = pbraan(2) - alpha*qbraan(2)
+
+      return
+      end
+c
+
       subroutine lxxxxx(p,fmass,nhel,nsf, lf)
 c
 c This subroutine computes a left-handed fermion wavefunction

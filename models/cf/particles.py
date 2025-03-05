@@ -153,6 +153,54 @@ W__plus__ = Particle(pdg_code = 90025,
 
 W__minus__ = W__plus__.anti()
 
+WP__plus__ = Particle(pdg_code = 70025,
+                     name = 'WP+',
+                     antiname = 'WP-',
+                     spin = 3,
+                     color = 1,
+                     mass = Param.MW,
+                     width = Param.WW,
+                     texname = 'WP+',
+                     antitexname = 'WP-',
+                     charge = 1,
+                     GhostNumber = 0,
+                     LeptonNumber = 0,
+                     Y = 0)
+
+WP_minus = WP__plus__.anti()
+
+WM__plus__ = Particle(pdg_code = 80025,
+                     name = 'WM+',
+                     antiname = 'WM-',
+                     spin = 3,
+                     color = 1,
+                     mass = Param.MW,
+                     width = Param.WW,
+                     texname = 'WM+',
+                     antitexname = 'WM-',
+                     charge = 1,
+                     GhostNumber = 0,
+                     LeptonNumber = 0,
+                     Y = 0)
+
+WM__minus__ = WM__plus__.anti()
+
+WZ__plus__ = Particle(pdg_code = 90125,
+                     name = 'WZ+',
+                     antiname = 'WZ-',
+                     spin = 3,
+                     color = 1,
+                     mass = Param.MW,
+                     width = Param.WW,
+                     texname = 'WZ+',
+                     antitexname = 'WZ-',
+                     charge = 1,
+                     GhostNumber = 0,
+                     LeptonNumber = 0,
+                     Y = 0)
+
+WZ__minus__ = WZ__plus__.anti()
+
 Z = Particle(pdg_code = 90026,
              name = 'Z',
              antiname = 'Z',
@@ -162,6 +210,48 @@ Z = Particle(pdg_code = 90026,
              width = Param.WZ,
              texname = 'Z',
              antitexname = 'Z',
+             charge = 0,
+             GhostNumber = 0,
+             LeptonNumber = 0,
+             Y = 0)
+
+ZP = Particle(pdg_code = 70026,
+             name = 'ZP',
+             antiname = 'ZP',
+             spin = 3,
+             color = 1,
+             mass = Param.MZ,
+             width = Param.WZ,
+             texname = 'ZP',
+             antitexname = 'ZP',
+             charge = 0,
+             GhostNumber = 0,
+             LeptonNumber = 0,
+             Y = 0)
+
+ZM = Particle(pdg_code = 80026,
+             name = 'ZM',
+             antiname = 'ZM',
+             spin = 3,
+             color = 1,
+             mass = Param.MZ,
+             width = Param.WZ,
+             texname = 'ZM',
+             antitexname = 'ZM',
+             charge = 0,
+             GhostNumber = 0,
+             LeptonNumber = 0,
+             Y = 0)
+
+ZZ = Particle(pdg_code = 90126,
+             name = 'ZZ',
+             antiname = 'ZZ',
+             spin = 3,
+             color = 1,
+             mass = Param.MZ,
+             width = Param.WZ,
+             texname = 'ZZ',
+             antitexname = 'ZZ',
              charge = 0,
              GhostNumber = 0,
              LeptonNumber = 0,
