@@ -1370,8 +1370,13 @@ class Amplitude(base_objects.PhysicsObject):
                     # TODO: Rather do this by changing the propagating option of left/right photons in
                     #  particles.py to propagating = false?
                     leg_ids = [leg[0] for leg in leg_vert_ids]
-                    if leg_ids == [90022, 90023, 90024]:
-                        leg_vert_ids = [leg_vert_ids[0]]
+                    if all(x in leg_ids for x in [90022, 90023, 90024]):
+                        new_leg_vert_ids = []
+                        for leg in leg_vert_ids:
+                            if leg[0] in [90023,90024]:
+                                continue
+                            new_leg_vert_ids.append(leg)
+                        leg_vert_ids = new_leg_vert_ids
 
                     # # AL: alternative option, keep say right photon in propagator
                     # if leg_ids == [90022, 90023, 90024] or leg_ids == [90023, 90024]:

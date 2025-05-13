@@ -3541,7 +3541,7 @@ class HelasMatrixElement(base_objects.PhysicsObject):
             pdg_code = ext_wfs[key]['particle']['pdg_code']
             # All chiral particle numbers between 90000 and 90024
             # TODO: Update this after choosing a consistent set of conventions!!
-            if pdg_code > 70000 and pdg_code < 90025:
+            if pdg_code > 70000 and pdg_code < 90099:
                 return True
         
         # Haven't found a chiral particle, return false
@@ -3840,11 +3840,11 @@ class HelasMatrixElement(base_objects.PhysicsObject):
         found_left_ferm = False
         found_right_ferm = False
         for leg in legs:
-            if abs(leg.get('id')) in [90001, 90005] and not found_left_ferm:
+            if abs(leg.get('id')) in [70011, 70013] and not found_left_ferm:
                 left_ferm = leg
                 found_left_ferm = True
         
-            elif abs(leg.get('id')) in [90003, 90007] and not found_right_ferm:
+            elif abs(leg.get('id')) in [90011, 80013] and not found_right_ferm:
                 right_ferm = leg
                 found_right_ferm = True
             elif found_right_ferm and found_left_ferm:

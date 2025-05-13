@@ -219,7 +219,8 @@ c       complex vcl(6)          : vector wavefunction    |pfl]<q|/<q pfl>
 c
       implicit none
       double complex vcl(6), pketsq(2), qbraan(2), qpprod, invQPprod, ic
-      double precision p(0:3),vmass,hel,hel0,pt,pt2,pp,pzpt,emp,sqh,q(0:3),sqp0p3,sqq0q3, svhel,sv, alpha, pfl(0:3), pflRot(0:3), qLoc(0:3)
+      double precision p(0:3),vmass,hel,hel0,pt,pt2,pp,pzpt,emp,sqh,q(0:3),sqp0p3,sqq0q3, svhel,sv, alpha
+      double precision pfl(0:3), pflRot(0:3), qLoc(0:3)
       integer nhel,nsv,nsvahl,nsvhel, i
 
       double precision rZero, rHalf, rOne, rTwo, rHalfSqH,rPosPrefac, rNegPrefac
