@@ -23,3 +23,4 @@ ve~ = vel~ ver~
 vm = vml vmr
 vm~ = vml~ vmr~
 alr = al ar
+zpm = zp zm zz

@@ -167,7 +167,7 @@ WP__plus__ = Particle(pdg_code = 70025,
                      LeptonNumber = 0,
                      Y = 0)
 
-WP_minus = WP__plus__.anti()
+WP__minus__ = WP__plus__.anti()
 
 WM__plus__ = Particle(pdg_code = 80025,
                      name = 'WM+',
