@@ -3650,7 +3650,7 @@ class HelasMatrixElement(base_objects.PhysicsObject):
 
             # get fermion name and chirality
             part_name = ext_wfs[ext_nums[ipart]].get('name')
-            misc.sprint('Particle is named %s' % part_name)
+            # misc.sprint('Particle is named %s' % part_name)
             if part_name[0] == 'v': # neutrino
                 leptonDict = {"e": "e", "m": "mu", "t": "tau"}
                 invChiDict = {"l": "r", "r": "l"}
@@ -3743,8 +3743,8 @@ class HelasMatrixElement(base_objects.PhysicsObject):
                 raise self.PhysicsObjectError("%s is not a valid chirality" % str(chirality))
 
             # loop over bosons which could be in the vertex
-            bosons = ['a','al','ar','z']
-            boson_ids = [90022, 90023, 90024,90026]
+            bosons = ['a','al','ar','z','zz','zp','zm']
+            boson_ids = [90022, 90023, 90024, 90026, 90126, 70026, 80026]
             for iboson, boson in enumerate(bosons):
                 if part_name[-1] == '+':
                     orig_vtx = part_name + part_name[:-2]

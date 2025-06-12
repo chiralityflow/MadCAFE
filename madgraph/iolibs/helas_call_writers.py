@@ -357,6 +357,36 @@ class HelasCallWriter(base_objects.PhysicsObject):
             call_lhs = ','.join(call.split(',')[:-2])
             call_rhs = ','.join(call.split(',')[-2:])
             call = call_lhs + ',P(0,' + str(ref_mom) + '),' + call_rhs
+        
+        # ZW: update PH vector wavefunction:
+        elif pdg_code in [70025,70026]:
+             # update name
+            call = call[:6] + 'P' + call[7:]
+
+            # insert reference momentum as argument
+            call_lhs = ','.join(call.split(',')[:-2])
+            call_rhs = ','.join(call.split(',')[-2:])
+            call = call_lhs + ',P(0,' + str(ref_mom) + '),' + call_rhs
+
+        # ZW: update MH vector wavefunction
+        elif pdg_code in [80025,80026]:
+             # update name
+            call = call[:6] + 'M' + call[7:]
+
+            # insert reference momentum as argument
+            call_lhs = ','.join(call.split(',')[:-2])
+            call_rhs = ','.join(call.split(',')[-2:])
+            call = call_lhs + ',P(0,' + str(ref_mom) + '),' + call_rhs
+
+        # ZW: update ZH vector wavefunction:
+        elif pdg_code in [90125,90126]:
+             # update name
+            call = call[:6] + 'Z' + call[7:]
+
+            # insert reference momentum as argument
+            call_lhs = ','.join(call.split(',')[:-2])
+            call_rhs = ','.join(call.split(',')[-2:])
+            call = call_lhs + ',P(0,' + str(ref_mom) + '),' + call_rhs
 
         return call
 

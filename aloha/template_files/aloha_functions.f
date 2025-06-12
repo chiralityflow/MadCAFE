@@ -501,7 +501,7 @@ c
       else if ( nsvhel.eq.1 ) then
          call vpxxxx(p,vmass,nhel,nsv,q,vcz)
          return
-      else if ( vmass.ne.rZero ) then
+      else if ( vmass.eq.rZero ) then
          write(*,*) '------------------------------------------------------------------'
          write(*,*) 'Error!!! Massless boson cannot be longitudinally polarised!!!!!!!!'
          write(*,*) '------------------------------------------------------------------'
