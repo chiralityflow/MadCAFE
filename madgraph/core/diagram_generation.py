@@ -1369,14 +1369,35 @@ class Amplitude(base_objects.PhysicsObject):
                     # ones will be unchanged.
                     # TODO: Rather do this by changing the propagating option of left/right photons in
                     #  particles.py to propagating = false?
+                    
+                    # ZW: creating vector of tuples for propagators to generalise propagator filtering
+                    
+                    prop_reduce = [([90022, 90023, 90024], 90022), 
+                                   ([90026, 70026, 80026, 90126], 90026), 
+                                   ([90025, 70025, 80025, 90125], 90025) ]
+                    
                     leg_ids = [leg[0] for leg in leg_vert_ids]
-                    if all(x in leg_ids for x in [90022, 90023, 90024]):
-                        new_leg_vert_ids = []
-                        for leg in leg_vert_ids:
-                            if leg[0] in [90023,90024]:
-                                continue
+                    new_leg_vert_ids = []
+
+                    for leg in leg_vert_ids:
+                        keep_leg = True
+                        for prop in prop_reduce:
+                            # if all propagators in prop are present, remove them
+                            if leg[0] in prop[0] and leg[0] != prop[1]:
+                                # misc.sprint('Removing propagator %s' % (leg[0]))
+                                keep_leg = False
+                                break
+                        if keep_leg:
                             new_leg_vert_ids.append(leg)
-                        leg_vert_ids = new_leg_vert_ids
+                    leg_vert_ids = new_leg_vert_ids
+                    
+                    # if all(x in leg_ids for x in [90022, 90023, 90024]):
+                    #     new_leg_vert_ids = []
+                    #     for leg in leg_vert_ids:
+                    #         if leg[0] in [90023,90024]:
+                    #             continue
+                    #         new_leg_vert_ids.append(leg)
+                    #     leg_vert_ids = new_leg_vert_ids
 
                     # # AL: alternative option, keep say right photon in propagator
                     # if leg_ids == [90022, 90023, 90024] or leg_ids == [90023, 90024]:
