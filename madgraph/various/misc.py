@@ -1519,6 +1519,15 @@ def get_symbols(words,symbols):
             pos_list.append(i)
     return pos_list
 
+def get_symbols_multi(words,symbols):
+    """ ZW: Finds the ordered positions of multiple symbols in a string"""
+    pos_list = []
+    for i in range(len(words)):
+        for j in range(len(symbols)):
+            if words[i] == symbols[j]:
+                pos_list.append(i)
+    return pos_list
+
 def get_particles(interaction):
     "ZW: Determines which particles are included in a given interaction, using the get_process_info_lines() convention"
     linebreaks = get_symbols(interaction,'\n')

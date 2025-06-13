@@ -3069,28 +3069,31 @@ CF2PY integer, intent(in) :: new_value
         # ZW: Find external particles in the process
         plushel_list = []
         minushel_list = []
+        zerohel_list = []
         # ZW: Based on naming convention of external particles in the UFO file,
         # where the second to last character of the name is assumed to denote chirality,
         # finds which helicities will contribute non-zero terms to the helicity sum
         # I.e. for a final-state left-handed particle, only terms where the particle
         # has helicity +1 will contribute
         for k in range(nexternal):
-            if (helas_calls[k][5:11] == 'LXXXXX') or (helas_calls[k][5:11] == 'VLXXXX'):
+            if (helas_calls[k][5:11] == 'LXXXXX') or (helas_calls[k][5:11] == 'VLXXXX') or (helas_calls[k][5:11] == 'VPXXXX'):
                 icpos = helas_calls[k].find('*IC(')
                 state_status = helas_calls[k][icpos-2:icpos]
                 if (state_status == '+1'):
                     plushel_list.append(k)
                 elif (state_status == '-1'):
                     minushel_list.append(k)
-            elif (helas_calls[k][5:11] == 'RXXXXX') or (helas_calls[k][5:11] == 'VRXXXX'):
+            elif (helas_calls[k][5:11] == 'RXXXXX') or (helas_calls[k][5:11] == 'VRXXXX') or (helas_calls[k][5:11] == 'VMXXXX'):
                 icpos = helas_calls[k].find('*IC(')
                 state_status = helas_calls[k][icpos-2:icpos]
                 if (state_status == '+1'):
                     minushel_list.append(k)
                 elif (state_status == '-1'):
                     plushel_list.append(k)
+            elif (helas_calls[k][5:11] == 'VZXXXX'):
+                zerohel_list.append(k)
         # ZW: If no chiral particles are found, returns the original helicity_lines
-        if (len(plushel_list) == 0) and (len(minushel_list) == 0):
+        if (len(plushel_list) == 0) and (len(minushel_list) == 0) and (len(zerohel_list) == 0):
             return (helicity_lines, ncomb)
         # ZW: Split the helicity_lines string into its rows
         helicity_rows = [-1] + misc.get_symbols(helicity_lines,'\n')
@@ -3104,17 +3107,27 @@ CF2PY integer, intent(in) :: new_value
             # so we search for the beginning of this array
             slashes = misc.get_symbols(curr_row, '/')
             curr_hel = curr_row[slashes[0]:]
-            # ZW: Helicities are written as either 1 or -1
-            ones = misc.get_symbols(curr_hel,'1')
+            # ZW: Helicities are written as either 1 or -1 (or 0)
+            ones = misc.get_symbols_multi(curr_hel,['1','0'])
             left_cor = True
             right_cor = True
+            zero_cor = True
             for p in plushel_list:
+                if (curr_hel[ones[p]:ones[p]+1] != '1'): # ZW: ignore this line if helicity is not +-1
+                    left_cor = False
+                    continue
                 if (curr_hel[ones[p]-1:ones[p]] != ' '):
                     left_cor = False
             for q in minushel_list:
+                if (curr_hel[ones[p]:ones[p]+1] != '1'): # ZW: ignore this line if helicity is not +-1
+                    right_cor = False
+                    continue
                 if (curr_hel[ones[q]-1:ones[q]] != '-'):
                     right_cor = False
-            if (left_cor) and (right_cor):
+            for r in zerohel_list:
+                if (curr_hel[ones[r]:ones[r]+1] != '0'): # ZW: ignore this line if helicity is not 0
+                    zero_cor = False
+            if (left_cor) and (right_cor) and (zero_cor):
                 prop_helicity_lines.append(curr_row)
         # ZW: Now make sure that we number the contributing helicity lines properly,
         # i.e. we want to make sure that these lines correspond to the first lines
@@ -4934,28 +4947,31 @@ class ProcessExporterFortranME(ProcessExporterFortran):
         # ZW: Find external particles in the process
         plushel_list = []
         minushel_list = []
+        zerohel_list = []
         # ZW: Based on naming convention of external particles in the UFO file,
         # where the second to last character of the name is assumed to denote chirality,
         # finds which helicities will contribute non-zero terms to the helicity sum
         # I.e. for a final-state left-handed particle, only terms where the particle
         # has helicity +1 will contribute
         for k in range(nexternal):
-            if (helas_calls[k][5:11] == 'LXXXXX') or (helas_calls[k][5:11] == 'VLXXXX'):
+            if (helas_calls[k][5:11] == 'LXXXXX') or (helas_calls[k][5:11] == 'VLXXXX') or (helas_calls[k][5:11] == 'VPXXXX'):
                 icpos = helas_calls[k].find('*IC(')
                 state_status = helas_calls[k][icpos-2:icpos]
                 if (state_status == '+1'):
                     plushel_list.append(k)
                 elif (state_status == '-1'):
                     minushel_list.append(k)
-            elif (helas_calls[k][5:11] == 'RXXXXX') or (helas_calls[k][5:11] == 'VRXXXX'):
+            elif (helas_calls[k][5:11] == 'RXXXXX') or (helas_calls[k][5:11] == 'VRXXXX') or (helas_calls[k][5:11] == 'VMXXXX'):
                 icpos = helas_calls[k].find('*IC(')
                 state_status = helas_calls[k][icpos-2:icpos]
                 if (state_status == '+1'):
                     minushel_list.append(k)
                 elif (state_status == '-1'):
                     plushel_list.append(k)
+            elif (helas_calls[k][5:11] == 'VZXXXX'):
+                zerohel_list.append(k)
         # ZW: If no chiral particles are found, returns the original helicity_lines
-        if (len(plushel_list) == 0) and (len(minushel_list) == 0):
+        if (len(plushel_list) == 0) and (len(minushel_list) == 0) and (len(zerohel_list) == 0):
             return (helicity_lines, ncomb)
         # ZW: Split the helicity_lines string into its rows
         helicity_rows = [-1] + misc.get_symbols(helicity_lines,'\n')
@@ -4969,17 +4985,27 @@ class ProcessExporterFortranME(ProcessExporterFortran):
             # so we search for the beginning of this array
             slashes = misc.get_symbols(curr_row, '/')
             curr_hel = curr_row[slashes[0]:]
-            # ZW: Helicities are written as either 1 or -1
-            ones = misc.get_symbols(curr_hel,'1')
+            # ZW: Helicities are written as either 1 or -1 (or 0)
+            ones = misc.get_symbols_multi(curr_hel,['1','0'])
             left_cor = True
             right_cor = True
+            zero_cor = True
             for p in plushel_list:
+                if (curr_hel[ones[p]:ones[p]+1] != '1'): # ZW: ignore this line if helicity is not +-1
+                    left_cor = False
+                    continue
                 if (curr_hel[ones[p]-1:ones[p]] != ' '):
                     left_cor = False
             for q in minushel_list:
+                if (curr_hel[ones[p]:ones[p]+1] != '1'): # ZW: ignore this line if helicity is not +-1
+                    right_cor = False
+                    continue
                 if (curr_hel[ones[q]-1:ones[q]] != '-'):
                     right_cor = False
-            if (left_cor) and (right_cor):
+            for r in zerohel_list:
+                if (curr_hel[ones[r]:ones[r]+1] != '0'): # ZW: ignore this line if helicity is not 0
+                    zero_cor = False
+            if (left_cor) and (right_cor) and (zero_cor):
                 prop_helicity_lines.append(curr_row)
         # ZW: Now make sure that we number the contributing helicity lines properly,
         # i.e. we want to make sure that these lines correspond to the first lines
