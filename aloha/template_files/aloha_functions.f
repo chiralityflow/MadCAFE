@@ -308,7 +308,8 @@ c nsvhel = 1, i.e. left-chiral (outgoing + hel or incoming - hel)
             endif
          
 c           qpprod = <q pb> = qbraan*pketan (= <q pbRot>)         
-            qpprod = qbraan(2)*dconjg(pketsq(1)) - qbraan(1)*dconjg(pketsq(2))
+c            qpprod = qbraan(2)*dconjg(pketsq(1)) - qbraan(1)*dconjg(pketsq(2))
+            qpprod = qbraan(1)*dconjg(pketsq(2))-qbraan(2)*dconjg(pketsq(1))
             invQPprod = rOne/qpprod
 
 c           rpprod = <rp> = rbraan*pketan
@@ -318,10 +319,15 @@ c                                                    (1 &  0)  (pketsq(2)^*)   (
 c           ZW: setting square ket components, EXcluding rotation back to pfl
             ! vcl(3) = (rPosPrefac*pketsq(1) + ic*rNegPrefac*pketsq(2))*invQPprod
             ! vcl(4) = (rPosPrefac*pketsq(2) + ic*rNegPrefac*pketsq(1))*invQPprod
-            vcl(3) = pketsq(1)*dconjg(qbraan(1))*invQPprod
-            vcl(4) = pketsq(1)*dconjg(qbraan(2))*invQPprod
-            vcl(5) = pketsq(2)*dconjg(qbraan(1))*invQPprod
-            vcl(6) = pketsq(2)*dconjg(qbraan(2))*invQPprod
+c            vcl(3) = pketsq(1)*dconjg(qbraan(1))*invQPprod
+c            vcl(4) = pketsq(1)*dconjg(qbraan(2))*invQPprod
+c            vcl(5) = pketsq(2)*dconjg(qbraan(1))*invQPprod
+c            vcl(6) = pketsq(2)*dconjg(qbraan(2))*invQPprod
+
+            vcl(3) = pketsq(1)*qbraan(1)*invQPprod
+            vcl(4) = pketsq(2)*qbraan(1)*invQPprod
+            vcl(5) = pketsq(1)*qbraan(2)*invQPprod
+            vcl(6) = pketsq(2)*qbraan(2)*invQPprod
          
 c nsvhel = -1, i.e. right-chiral (outgoing - hel or incoming + hel)
          else
@@ -440,12 +446,18 @@ c nsvhel = -1, i.e. right-chiral (outgoing - hel or incoming + hel)
 c           prprod = [pr] = pbrasq*rketsq
 c           pbrasq = [p| = (-<p|^a*eps_{ab})^\dagger = -(pbraan(1)^*, pbraan(2)^*) (0 & -1)   = (-pbraan(2)^*, pbraan(1)^*)
 c                                                                                  (1 &  0)     
-            pqprod = -conjg(pbraan(2))*qketsq(1) + conjg(pbraan(1))*qketsq(2)
+c            pqprod = -conjg(pbraan(2))*qketsq(1) + conjg(pbraan(1))*qketsq(2)
+            pqprod = -dconjg(pbraan(2))*qketsq(1) + dconjg(pbraan(1))*qketsq(2)
             invPQprod = rOne/pqprod
-            vcr(3) = qketsq(1)*conjg(pbraan(1))*invPQprod
-            vcr(4) = qketsq(1)*conjg(pbraan(2))*invPQprod
-            vcr(5) = qketsq(2)*conjg(pbraan(1))*invPQprod
-            vcr(6) = qketsq(2)*conjg(pbraan(2))*invPQprod
+c            vcr(3) = qketsq(1)*conjg(pbraan(1))*invPQprod
+c            vcr(4) = qketsq(1)*conjg(pbraan(2))*invPQprod
+c            vcr(5) = qketsq(2)*conjg(pbraan(1))*invPQprod
+c            vcr(6) = qketsq(2)*conjg(pbraan(2))*invPQprod
+
+            vcr(3) = pbraan(1)*qketsq(1)*invPQprod
+            vcr(4) = pbraan(1)*qketsq(2)*invPQprod
+            vcr(5) = pbraan(2)*qketsq(1)*invPQprod
+            vcr(6) = pbraan(2)*qketsq(2)*invPQprod
          
 c nsvhel = 1, i.e. left-chiral (outgoing + hel or incoming - hel)
          else
@@ -572,10 +584,16 @@ c      vcz(3) = (pketsq(1) - alpha*qketsq(1))*invMass
 c      vcz(4) = (pketsq(2) - alpha*qketsq(2))*invMass
 c      vcz(5) = pbraan(1) - alpha*qbraan(1)
 c      vcz(6) = pbraan(2) - alpha*qbraan(2)
-      vcz(3) = (pketsq(1) * dconjg(pbraan(1)) - alpha * qketsq(1) * dconjg(qbraan(1))) * invMass
-      vcz(4) = (pketsq(1) * dconjg(pbraan(1)) - alpha * qketsq(2) * dconjg(qbraan(2))) * invMass
-      vcz(5) = (pketsq(2) * dconjg(pbraan(2)) - alpha * qketsq(1) * dconjg(qbraan(1))) * invMass
-      vcz(6) = (pketsq(2) * dconjg(pbraan(2)) - alpha * qketsq(2) * dconjg(qbraan(2))) * invMass
+
+c      vcz(3) = (pketsq(1) * dconjg(pbraan(1)) - alpha * qketsq(1) * dconjg(qbraan(1))) * invMass
+c      vcz(4) = (pketsq(1) * dconjg(pbraan(1)) - alpha * qketsq(2) * dconjg(qbraan(2))) * invMass
+c      vcz(5) = (pketsq(2) * dconjg(pbraan(2)) - alpha * qketsq(1) * dconjg(qbraan(1))) * invMass
+c      vcz(6) = (pketsq(2) * dconjg(pbraan(2)) - alpha * qketsq(2) * dconjg(qbraan(2))) * invMass
+
+      vcz(3) = (pketsq(1)*pbraan(1) - alpha*qketsq(1)*qbraan(1))*invMass
+      vcz(4) = (pketsq(2)*pbraan(1) - alpha*qketsq(2)*qbraan(1))*invMass
+      vcz(5) = (pketsq(1)*pbraan(2) - alpha*qketsq(1)*qbraan(2))*invMass
+      vcz(6) = (pketsq(2)*pbraan(2) - alpha*qketsq(2)*qbraan(2))*invMass
       return
       end
 c
