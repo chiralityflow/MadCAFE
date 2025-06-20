@@ -309,7 +309,7 @@ c nsvhel = 1, i.e. left-chiral (outgoing + hel or incoming - hel)
          
 c           qpprod = <q pb> = qbraan*pketan (= <q pbRot>)         
 c            qpprod = qbraan(2)*dconjg(pketsq(1)) - qbraan(1)*dconjg(pketsq(2))
-            qpprod = qbraan(1)*dconjg(pketsq(2))-qbraan(2)*dconjg(pketsq(1))
+            qpprod = -qbraan(1)*conjg(pketsq(2))+qbraan(2)*conjg(pketsq(1))
             invQPprod = rOne/qpprod
 
 c           rpprod = <rp> = rbraan*pketan
@@ -324,10 +324,10 @@ c            vcl(4) = pketsq(1)*dconjg(qbraan(2))*invQPprod
 c            vcl(5) = pketsq(2)*dconjg(qbraan(1))*invQPprod
 c            vcl(6) = pketsq(2)*dconjg(qbraan(2))*invQPprod
 
-            vcl(3) = pketsq(1)*qbraan(1)*invQPprod
-            vcl(4) = pketsq(2)*qbraan(1)*invQPprod
-            vcl(5) = pketsq(1)*qbraan(2)*invQPprod
-            vcl(6) = pketsq(2)*qbraan(2)*invQPprod
+            vcl(3) = pketsq(2)*qbraan(2)*dsqrt(rTwo)*invQPprod
+            vcl(4) = -pketsq(1)*qbraan(2)*dsqrt(rTwo)*invQPprod
+            vcl(5) = -pketsq(2)*qbraan(1)*dsqrt(rTwo)*invQPprod
+            vcl(6) = pketsq(1)*qbraan(1)*dsqrt(rTwo)*invQPprod
          
 c nsvhel = -1, i.e. right-chiral (outgoing - hel or incoming + hel)
          else
@@ -447,17 +447,17 @@ c           prprod = [pr] = pbrasq*rketsq
 c           pbrasq = [p| = (-<p|^a*eps_{ab})^\dagger = -(pbraan(1)^*, pbraan(2)^*) (0 & -1)   = (-pbraan(2)^*, pbraan(1)^*)
 c                                                                                  (1 &  0)     
 c            pqprod = -conjg(pbraan(2))*qketsq(1) + conjg(pbraan(1))*qketsq(2)
-            pqprod = -dconjg(pbraan(2))*qketsq(1) + dconjg(pbraan(1))*qketsq(2)
+            pqprod = -conjg(pbraan(2))*qketsq(1) + conjg(pbraan(1))*qketsq(2)
             invPQprod = rOne/pqprod
 c            vcr(3) = qketsq(1)*conjg(pbraan(1))*invPQprod
 c            vcr(4) = qketsq(1)*conjg(pbraan(2))*invPQprod
 c            vcr(5) = qketsq(2)*conjg(pbraan(1))*invPQprod
 c            vcr(6) = qketsq(2)*conjg(pbraan(2))*invPQprod
 
-            vcr(3) = pbraan(1)*qketsq(1)*invPQprod
-            vcr(4) = pbraan(1)*qketsq(2)*invPQprod
-            vcr(5) = pbraan(2)*qketsq(1)*invPQprod
-            vcr(6) = pbraan(2)*qketsq(2)*invPQprod
+            vcr(3) = pbraan(2)*qketsq(2)*dsqrt(rTwo)*invPQprod
+            vcr(4) = -pbraan(2)*qketsq(1)*dsqrt(rTwo)*invPQprod
+            vcr(5) = -pbraan(1)*qketsq(2)*dsqrt(rTwo)*invPQprod
+            vcr(6) = pbraan(1)*qketsq(1)*dsqrt(rTwo)*invPQprod
          
 c nsvhel = 1, i.e. left-chiral (outgoing + hel or incoming - hel)
          else
