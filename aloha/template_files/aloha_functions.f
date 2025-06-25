@@ -590,10 +590,10 @@ c      vcz(4) = (pketsq(1) * dconjg(pbraan(1)) - alpha * qketsq(2) * dconjg(qbra
 c      vcz(5) = (pketsq(2) * dconjg(pbraan(2)) - alpha * qketsq(1) * dconjg(qbraan(1))) * invMass
 c      vcz(6) = (pketsq(2) * dconjg(pbraan(2)) - alpha * qketsq(2) * dconjg(qbraan(2))) * invMass
 
-      vcz(3) = (pketsq(1)*pbraan(1) - alpha*qketsq(1)*qbraan(1))*invMass
-      vcz(4) = (pketsq(2)*pbraan(1) - alpha*qketsq(2)*qbraan(1))*invMass
-      vcz(5) = (pketsq(1)*pbraan(2) - alpha*qketsq(1)*qbraan(2))*invMass
-      vcz(6) = (pketsq(2)*pbraan(2) - alpha*qketsq(2)*qbraan(2))*invMass
+      vcz(3) = (pketsq(2)*pbraan(2) - alpha*qketsq(2)*qbraan(2))*invMass*dsqrt(rTwo)
+      vcz(4) = -(pketsq(1)*pbraan(2) - alpha*qketsq(1)*qbraan(2))*invMass*dsqrt(rTwo)
+      vcz(5) = -(pketsq(2)*pbraan(1) - alpha*qketsq(2)*qbraan(1))*invMass*dsqrt(rTwo)
+      vcz(6) = (pketsq(1)*pbraan(1) - alpha*qketsq(1)*qbraan(1))*invMass*dsqrt(rTwo)
       return
       end
 c
