@@ -24,3 +24,5 @@ vm = vml vmr
 vm~ = vml~ vmr~
 alr = al ar
 zpm = zp zm zz
+wpm- = wp- wm- wz-
+wpm+ = wp+ wm+ wz+

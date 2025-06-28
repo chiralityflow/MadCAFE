@@ -469,3 +469,30 @@ GC_108 = Coupling(name = 'GC_108',
                   value = '(ee*complex(0,1)*complexconjugate(CKM3x3))/(sw*cmath.sqrt(2))',
                   order = {'QED':1})
 
+# SS: The 3-boson vertex couplings are defined here. 
+
+GC_109 = Coupling(name = 'GC_109',
+                  value = '-(ee*complex(0,1))',
+                  order = {'QED':1})
+
+GC_110 = Coupling(name = 'GC_110',
+                  value = '-(ee*complex(0,1)*cw/sw)',
+                  order = {'QED':1})
+
+# SS: The 4-boson vertex couplings are defined here. 
+
+GC_111 = Coupling(name = 'GC_111',
+                  value = '(ee*complex(0,1)/(sw**2))',
+                  order = {'QED':1})
+
+GC_112 = Coupling(name = 'GC_112',
+                  value = '-(ee*complex(0,1)*(cw**2/sw**2))',
+                  order = {'QED':1})
+
+GC_113 = Coupling(name = 'GC_113',
+                  value = '-(ee*complex(0,1)*cw/sw)',
+                  order = {'QED':1})
+
+GC_114 = Coupling(name = 'GC_114',
+                  value = '-(ee*complex(0,1))',
+                  order = {'QED':1})
