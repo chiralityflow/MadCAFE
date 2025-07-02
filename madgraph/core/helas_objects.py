@@ -680,7 +680,7 @@ class HelasWavefunction(base_objects.PhysicsObject):
                     ref_momenta = arguments[3]
                     # AL: if gauge boson, set reference momentum
                     # AL: TODO: update when we update pid conventions
-                    if leg.get('id') in [90023, 90024]:
+                    if abs(leg.get('id')) in [90023, 90024, 70025, 80025, 90125, 70026, 80026, 90126]:
                         self.set('ref_mom', ref_momenta[leg.get('number')-1])
                 
                 # decay_ids is the pdg codes for particles with decay
@@ -3840,11 +3840,11 @@ class HelasMatrixElement(base_objects.PhysicsObject):
         found_left_ferm = False
         found_right_ferm = False
         for leg in legs:
-            if abs(leg.get('id')) in [70011, 70013] and not found_left_ferm:
+            if abs(leg.get('id')) in [70011, 70012, 70013, 70014] and not found_left_ferm:
                 left_ferm = leg
                 found_left_ferm = True
-        
-            elif abs(leg.get('id')) in [90011, 80013] and not found_right_ferm:
+
+            elif abs(leg.get('id')) in [80011, 80012, 80013, 80014] and not found_right_ferm:
                 right_ferm = leg
                 found_right_ferm = True
             elif found_right_ferm and found_left_ferm:
@@ -3853,11 +3853,11 @@ class HelasMatrixElement(base_objects.PhysicsObject):
         # find photons and update its reference momenta
         for leg in legs:
             # if left photon, append right (anti)fermion
-            if leg.get('id') == 90023:
+            if abs(leg.get('id')) in [70025, 70026, 90023]:
                 ref_moms.append(right_ferm.get('number'))
                 # ref_moms.append(left_ferm.get('number'))
             # if right photon, append left (anti)fermion
-            elif leg.get('id') == 90024:
+            elif abs(leg.get('id')) in [80025, 80026, 90024]:
                 ref_moms.append(left_ferm.get('number'))
                 # ref_moms.append(right_ferm.get('number'))
             # else append -1

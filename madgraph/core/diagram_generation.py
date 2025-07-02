@@ -1411,8 +1411,10 @@ class Amplitude(base_objects.PhysicsObject):
                                                                   state)
                     
                     reduced_list.append([l[0] for l in new_leg_vert_ids])
-     
+                    # misc.sprint(new_leg_vert_ids)
                     # AL: change left <-> right for chiral particles
+                    if len(new_leg_vert_ids) == 0:
+                        return res
                     if new_leg_vert_ids[0][0]['id'] == -70011: 
                         new_leg_vert_ids[0][0]['id'] = -80011
                     elif new_leg_vert_ids[0][0]['id'] == -80011: 
@@ -1429,6 +1431,14 @@ class Amplitude(base_objects.PhysicsObject):
                         new_leg_vert_ids[0][0]['id'] = 80013
                     elif new_leg_vert_ids[0][0]['id'] == 80013: 
                         new_leg_vert_ids[0][0]['id'] = 70013
+                    elif new_leg_vert_ids[0][0]['id'] == 70012:
+                        new_leg_vert_ids[0][0]['id'] = 80012
+                    elif new_leg_vert_ids[0][0]['id'] == 80012:
+                        new_leg_vert_ids[0][0]['id'] = 70012
+                    elif new_leg_vert_ids[0][0]['id'] == -70012:
+                        new_leg_vert_ids[0][0]['id'] = -80012
+                    elif new_leg_vert_ids[0][0]['id'] == -80012:
+                        new_leg_vert_ids[0][0]['id'] = -70012
 
                     
                     # Create and add the corresponding vertex

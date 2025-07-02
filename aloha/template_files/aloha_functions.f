@@ -234,7 +234,7 @@ c
       double precision pfl(0:3), pflRot(0:3), qLoc(0:3)
       integer nhel,nsv,nsvahl,nsvhel, i
 
-      double precision rZero, rHalf, rOne, rTwo, rHalfSqH,rPosPrefac, rNegPrefac
+      double precision rZero, rHalf, rOne, rTwo, rHalfSqH,rPosPrefac, rNegPrefac, threeMomProd
       parameter( rZero = 0.0d0, rHalf = 0.5d0 )
       parameter( rOne = 1.0d0, rTwo = 2.0d0 )
 
@@ -254,7 +254,8 @@ c
 
       ! qLoc(0:3) = q(0:3)
 c ZW: hard-coding helicity basis for now
-      qLoc(0) = p(0)
+      threeMomProd = dsqrt(p(1)**2 + p(2)**2 + p(3)**2)
+      qLoc(0) = p(0) - threeMomProd
       qLoc(1:3) = -1.0d0*p(1:3)
 
       alpha = rHalf*(vmass**2)/(p(0)*qLoc(0) - p(1)*qLoc(1) - p(2)*qLoc(2) - p(3)*qLoc(3))
@@ -362,7 +363,7 @@ c
       integer nhel,nsv,nsvahl,nsvhel,i
       double precision invMass
 
-      double precision rZero, rHalf, rOne, rTwo, rHalfSqH,rPosPrefac, rNegPrefac
+      double precision rZero, rHalf, rOne, rTwo, rHalfSqH,rPosPrefac, rNegPrefac, threeMomProd
       parameter( rZero = 0.0d0, rHalf = 0.5d0 )
       parameter( rOne = 1.0d0, rTwo = 2.0d0 )
 
@@ -381,7 +382,8 @@ c
 
       ! qLoc(0:3) = q(0:3)
 c ZW: hard-coding helcity basis for now
-      qLoc(0) = p(0)
+      threeMomProd = dsqrt(p(1)**2 + p(2)**2 + p(3)**2)
+      qLoc(0) = p(0) - threeMomProd
       qLoc(1:3) = -1.0d0*p(1:3)
 
       alpha = rHalf*(vmass**2)/(p(0)*qLoc(0) - p(1)*qLoc(1) - p(2)*qLoc(2) - p(3)*qLoc(3))
@@ -492,7 +494,7 @@ c
       double precision p(0:3),vmass,invMass,hel,hel0,pzpt,emp,sqh,q(0:3),sqp0p3,sqq0q3, alpha, pfl(0:3), pflRot(0:3), qLoc(0:3)
       integer nhel,nsv,nsvahl,nsvhel,i
 
-      double precision rZero, rHalf, rOne, rTwo, rHalfSqH,rPosPrefac, rNegPrefac
+      double precision rZero, rHalf, rOne, rTwo, rHalfSqH,rPosPrefac, rNegPrefac, threeMomProd
       parameter( rZero = 0.0d0, rHalf = 0.5d0 )
       parameter( rOne = 1.0d0, rTwo = 2.0d0 )
 
@@ -523,7 +525,8 @@ c
 
       ! qLoc(0:3) = q(0:3)
 c ZW: hard-coding helcity basis for now
-      qLoc(0) = p(0)
+      threeMomProd = dsqrt(p(1)**2 + p(2)**2 + p(3)**2)
+      qLoc(0) = p(0) - threeMomProd
       qLoc(1:3) = -1.0d0*p(1:3)
 
       alpha = rHalf*(vmass**2)/(p(0)*qLoc(0) - p(1)*qLoc(1) - p(2)*qLoc(2) - p(3)*qLoc(3))
