@@ -259,7 +259,7 @@ c ZW: hard-coding helicity basis for now
       pfront = p(0) + threeMomProd
       pback = p(0) - threeMomProd
       qLoc(0) = 0.5d0 * pback
-      qLoc(1:3) = -0.5d0*pback**invMomProd*p(1:3)
+      qLoc(1:3) = -0.5d0*pback*invMomProd*p(1:3)
 
       alpha = rHalf*(vmass**2)/(p(0)*qLoc(0) - p(1)*qLoc(1) - p(2)*qLoc(2) - p(3)*qLoc(3))
 
