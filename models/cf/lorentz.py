@@ -67,17 +67,23 @@ VVV1 = Lorentz(name = 'VVV1',
                 spins = [ 3, 3, 3 ],
                 structure = 'P(3,1)*Metric(1,2) - P(3,2)*Metric(1,2) - P(2,1)*Metric(1,3) + P(2,3)*Metric(1,3) + P(1,2)*Metric(2,3) - P(1,3)*Metric(2,3)')
 
-VVVV1 = Lorentz(name = 'VVVV1',
-                spins = [ 3, 3, 3, 3 ],
-                structure = 'Metric(1,4)*Metric(2,3) - Metric(1,3)*Metric(2,4)')
+# SS: We are using VVVV2 instead of VVVV1, VVVV3 and VVVV4 as VVVV2 is sum over all other lorentz structure. So we do not need to define 3 Lorentz structure.
 
-VVVV3 = Lorentz(name = 'VVVV3',
+'''VVVV1 = Lorentz(name = 'VVVV1',
+                spins = [ 3, 3, 3, 3 ],
+                structure = 'Metric(1,4)*Metric(2,3) - Metric(1,3)*Metric(2,4)')'''
+
+VVVV2 = Lorentz(name = 'VVVV2',
+                spins = [ 3, 3, 3, 3 ],
+                structure = '2*Metric(1,3)*Metric(2,4) - Metric(1,2)*Metric(3,4) - Metric(1,4)*Metric(2,3)')
+
+'''VVVV3 = Lorentz(name = 'VVVV3',
                 spins = [ 3, 3, 3, 3 ],
                 structure = 'Metric(1,4)*Metric(2,3) - Metric(1,2)*Metric(3,4)')
 
 VVVV4 = Lorentz(name = 'VVVV4',
                 spins = [ 3, 3, 3, 3 ],
-                structure = 'Metric(1,3)*Metric(2,4) - Metric(1,2)*Metric(3,4)')
+                structure = 'Metric(1,3)*Metric(2,4) - Metric(1,2)*Metric(3,4)')'''
 
 # AL: I have commented out all other lorentz structures that we don't yet use in building
 # chirality-flow diagrams
