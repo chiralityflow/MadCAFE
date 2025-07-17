@@ -304,7 +304,7 @@ c nsvhel = 1, i.e. left-chiral (outgoing + hel or incoming - hel)
             if ( sqp0p3.eq.rZero ) then
                pketsq(1) = dcmplx( dsqrt(rTwo*pflRot(0)) )
             else
-               pketsq(1) = dcmplx(p(1),-1*pflRot(2))/sqp0p3
+               pketsq(1) = dcmplx(pflRot(1),-1*pflRot(2))/sqp0p3
             endif
             if ( sqq0q3.eq.rZero ) then
                qbraan(1) = dcmplx( dsqrt(rTwo*qLoc(0)) )
