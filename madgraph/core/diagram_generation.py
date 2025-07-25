@@ -734,6 +734,23 @@ class Amplitude(base_objects.PhysicsObject):
             ref_dict_to0[(80013,-70013)] = [0]
             ref_dict_to0.pop((-80013,80013),None)
             ref_dict_to0[(-80013,70013)] = [0]
+            
+            ref_dict_to0.pop((70012,-70012),None)
+            ref_dict_to0[(70012,-80012)] = [0]
+            ref_dict_to0.pop((-70012,70012),None)
+            ref_dict_to0[(-70012,80012)] = [0]
+            ref_dict_to0.pop((80012,-80012),None)
+            ref_dict_to0[(80012,-70012)] = [0]
+            ref_dict_to0.pop((-80012,80012),None)
+            ref_dict_to0[(-80012,70012)] = [0]
+            ref_dict_to0.pop((70014,-70014),None)
+            ref_dict_to0[(70014,-80014)] = [0]
+            ref_dict_to0.pop((-70014,70014),None)
+            ref_dict_to0[(-70014,80014)] = [0]
+            ref_dict_to0.pop((80014,-80014),None)
+            ref_dict_to0[(80014,-70014)] = [0]
+            ref_dict_to0.pop((-80014,80014),None)
+            ref_dict_to0[(-80014,70014)] = [0]
 
             reduced_leglist = self.reduce_leglist(leglist,
                                                   max_multi_to1,

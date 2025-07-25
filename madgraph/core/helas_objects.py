@@ -3655,89 +3655,90 @@ class HelasMatrixElement(base_objects.PhysicsObject):
                 leptonDict = {"e": "e", "m": "mu", "t": "tau"}
                 invChiDict = {"l": "r", "r": "l"}
                 bosonDict = {"+": "-", "-": "+"}
-                bosons = ["w"]
-                boson_ids = {"w+": 90025, "w-": -90025}
-                chirality = ""
-                weakCh = ""
-                elecCh = ""
-                orig_vtx = ""
-                part_name_p = ""
-                part_name_m = ""
-                if(part_name[-1] == '~'):
-                    chirality = part_name[-2]
-                    weakCh = part_name[-3]
-                    elecCh = "-"
-                else:
-                    chirality = part_name[-1]
-                    weakCh = part_name[-2]
-                    elecCh = "+"
-                leptnId = -(self.sign(part)) * (abs(part) - 1)
-                lepton = leptonDict[weakCh] + chirality + elecCh
-                if(part_name[-1] == '~'):
-                    part_name_p = part_name
-                    part_name_m = lepton 
-                    orig_vtx = part_name + leptonDict[weakCh] + invChiDict[chirality] + elecCh
-                else:
-                    part_name_p = lepton
-                    part_name_m = part_name
-                    orig_vtx = leptonDict[weakCh] + invChiDict[chirality] + elecCh + part_name
-                boson = "w" + bosonDict[elecCh]
-                new_vtx_mp = part_name_m + part_name_p + boson
-                new_vtx_pm = part_name_p + part_name_m + boson
-                orig_vtx += boson
+                bosons = ["w","wp","wm","wz"]
+                boson_ids = {"w+": 90025, "w-": -90025, "wp+": 70025, "wp-": -70025, "wm+": 80025, "wm-": -80025, "wz+": 90125, "wz-": -90125}
+                for boson in bosons:
+                    chirality = ""
+                    weakCh = ""
+                    elecCh = ""
+                    orig_vtx = ""
+                    part_name_p = ""
+                    part_name_m = ""
+                    if(part_name[-1] == '~'):
+                        chirality = part_name[-2]
+                        weakCh = part_name[-3]
+                        elecCh = "-"
+                    else:
+                        chirality = part_name[-1]
+                        weakCh = part_name[-2]
+                        elecCh = "+"
+                    leptnId = -(self.sign(part)) * (abs(part) - 1)
+                    lepton = leptonDict[weakCh] + chirality + elecCh
+                    if(part_name[-1] == '~'):
+                        part_name_p = part_name
+                        part_name_m = lepton 
+                        orig_vtx = part_name + leptonDict[weakCh] + invChiDict[chirality] + elecCh
+                    else:
+                        part_name_p = lepton
+                        part_name_m = part_name
+                        orig_vtx = leptonDict[weakCh] + invChiDict[chirality] + elecCh + part_name
+                    boson = "w" + bosonDict[elecCh]
+                    new_vtx_mp = part_name_m + part_name_p + boson
+                    new_vtx_pm = part_name_p + part_name_m + boson
+                    orig_vtx += boson
                 
                 # Get new interaction that we'll add to dictionary
-                new_int_mp = copy.deepcopy(model.get('interaction_dict')[vert_to_id_dict[orig_vtx]])
-                new_int_pm = copy.deepcopy(model.get('interaction_dict')[vert_to_id_dict[orig_vtx]])
+                    new_int_mp = copy.deepcopy(model.get('interaction_dict')[vert_to_id_dict[orig_vtx]])
+                    new_int_pm = copy.deepcopy(model.get('interaction_dict')[vert_to_id_dict[orig_vtx]])
 
                 # AL: Give interaction an unused id
-                n_ints_in_model = len(model.get('interaction_dict'))
-                new_int_mp['id'] = n_ints_in_model + 1
-                new_int_pm['id'] = n_ints_in_model + 2
+                    n_ints_in_model = len(model.get('interaction_dict'))
+                    new_int_mp['id'] = n_ints_in_model + 1
+                    new_int_pm['id'] = n_ints_in_model + 2
 
-                # Put in dictionary vert_ids_to_pdg
-                # TODO: Update this function when new bosons are available for third particle
-                if part < 0:
-                    # mp vertex
-                    vert_ids_to_pdg[n_ints_in_model + 1] = [leptnId, part, boson_ids[boson]]
-                    # pm vertex
-                    vert_ids_to_pdg[n_ints_in_model + 2] = [part, leptnId, boson_ids[boson]]
-                else:
-                    # mp vertex
-                    vert_ids_to_pdg[n_ints_in_model + 1] = [part, leptnId, boson_ids[boson]]
-                    # pm vertex
-                    vert_ids_to_pdg[n_ints_in_model + 2] = [leptnId, part, boson_ids[boson]]
+                    # Put in dictionary vert_ids_to_pdg
+                    # TODO: Update this function when new bosons are available for third particle
+                    if part < 0:
+                        # mp vertex
+                        vert_ids_to_pdg[n_ints_in_model + 1] = [leptnId, part, boson_ids[boson]]
+                        # pm vertex
+                        vert_ids_to_pdg[n_ints_in_model + 2] = [part, leptnId, boson_ids[boson]]
+                    else:
+                        # mp vertex
+                        vert_ids_to_pdg[n_ints_in_model + 1] = [part, leptnId, boson_ids[boson]]
+                        # pm vertex
+                        vert_ids_to_pdg[n_ints_in_model + 2] = [leptnId, part, boson_ids[boson]]
 
-                # AL: for RR, use RRV1, for LL, use LLV1
-                if chirality == 'r':
-                    new_int_mp['lorentz'] = ['RRV1']
-                    new_int_pm['lorentz'] = ['RRV1']
-                else: 
-                    new_int_mp['lorentz'] = ['LLV1']
-                    new_int_pm['lorentz'] = ['LLV1']
+                    # AL: for RR, use RRV1, for LL, use LLV1
+                    if chirality == 'r':
+                        new_int_mp['lorentz'] = ['RRV1']
+                        new_int_pm['lorentz'] = ['RRV1']
+                    else: 
+                        new_int_mp['lorentz'] = ['LLV1']
+                        new_int_pm['lorentz'] = ['LLV1']
             
-                # AL: update particles in interaction
-                if new_int_mp['particles'][0]['pdg_code'] == part:
-                    new_int_mp['particles'][1] = copy.copy(new_int_mp['particles'][0])
-                elif new_int_mp['particles'][1]['pdg_code'] == part:
-                    new_int_mp['particles'][0] = copy.copy(new_int_mp['particles'][1])
-                if new_int_pm['particles'][0]['pdg_code'] == part:
-                    new_int_pm['particles'][1] = copy.copy(new_int_pm['particles'][0])
-                elif new_int_pm['particles'][1]['pdg_code'] == part:
-                    new_int_pm['particles'][0] = copy.copy(new_int_pm['particles'][1])
+                    # AL: update particles in interaction
+                    if new_int_mp['particles'][0]['pdg_code'] == part:
+                        new_int_mp['particles'][1] = copy.copy(new_int_mp['particles'][0])
+                    elif new_int_mp['particles'][1]['pdg_code'] == part:
+                        new_int_mp['particles'][0] = copy.copy(new_int_mp['particles'][1])
+                    if new_int_pm['particles'][0]['pdg_code'] == part:
+                        new_int_pm['particles'][1] = copy.copy(new_int_pm['particles'][0])
+                    elif new_int_pm['particles'][1]['pdg_code'] == part:
+                        new_int_pm['particles'][0] = copy.copy(new_int_pm['particles'][1])
 
-                # AL: update which is particle, antiparticle
-                new_int_mp['particles'][0]['is_part'] = True
-                new_int_mp['particles'][1]['is_part'] = False
-                new_int_pm['particles'][0]['is_part'] = False
-                new_int_pm['particles'][1]['is_part'] = True
+                    # AL: update which is particle, antiparticle
+                    new_int_mp['particles'][0]['is_part'] = True
+                    new_int_mp['particles'][1]['is_part'] = False
+                    new_int_pm['particles'][0]['is_part'] = False
+                    new_int_pm['particles'][1]['is_part'] = True
             
-                # AL: add new interaction to the interaction_dict and interactions
-                model.get('interaction_dict')[n_ints_in_model + 1] = new_int_mp
-                model.get('interactions').append(new_int_mp)
-                model.get('interaction_dict')[n_ints_in_model + 2] = new_int_pm
-                model.get('interactions').append(new_int_pm)
-                continue
+                    # AL: add new interaction to the interaction_dict and interactions
+                    model.get('interaction_dict')[n_ints_in_model + 1] = new_int_mp
+                    model.get('interactions').append(new_int_mp)
+                    model.get('interaction_dict')[n_ints_in_model + 2] = new_int_pm
+                    model.get('interactions').append(new_int_pm)
+                    continue
             chirality = part_name[-2]
             if chirality != 'l' and chirality != 'r':
                 raise self.PhysicsObjectError("%s is not a valid chirality" % str(chirality))
