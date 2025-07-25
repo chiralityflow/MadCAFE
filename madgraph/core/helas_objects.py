@@ -681,7 +681,10 @@ class HelasWavefunction(base_objects.PhysicsObject):
                     # AL: if gauge boson, set reference momentum
                     # AL: TODO: update when we update pid conventions
                     if abs(leg.get('id')) in [90023, 90024, 70025, 80025, 90125, 70026, 80026, 90126]:
-                        self.set('ref_mom', ref_momenta[leg.get('number')-1])
+                        if len(ref_momenta) < leg.get('number'):
+                            self.set('ref_mom', -1)
+                        else:
+                            self.set('ref_mom', ref_momenta[leg.get('number')-1])
                 
                 # decay_ids is the pdg codes for particles with decay
                 # chains defined
@@ -3596,6 +3599,9 @@ class HelasMatrixElement(base_objects.PhysicsObject):
         # TODO: Update this when we have new pdg_codes convention with e.g. left < right
         boson_codes = [x for x in pdg_codes if abs(x) % 100 > 20]
         fermion_codes = [x for x in pdg_codes if abs(x) % 100 < 20]
+        if len(fermion_codes) == 0:
+            # No fermions, so no need to change vertex id
+            return vertex
         boson_codes.sort()
         fermion_codes.sort()
         pdg_codes = fermion_codes + boson_codes

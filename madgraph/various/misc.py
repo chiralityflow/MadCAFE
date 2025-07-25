@@ -1753,7 +1753,7 @@ def vertex_replacer(text, vertex):
     if (vertex == 'VVVV2_0'):
         VVVV2_0_replace = '      VERTEX = COUP*CI*(2*{}*{} - {}*{} - {}*{})'.format(vec_vec('V1','V3'), vec_vec('V2','V4'), vec_vec('V1','V2'), vec_vec('V3','V4'), vec_vec('V1','V4'), vec_vec('V2','V3'))
         linebreaks = get_symbols(text_copy, '\n')
-        text_copy = text_copy[:linebreaks[12]+1] + text_copy[linebreaks[21]+1:linebreaks[37]+1] + VVVV2_0_replace + text_copy[linebreaks[48]+1:]
+        text_copy = text_copy[:linebreaks[8]+1] + text_copy[linebreaks[14]+1:linebreaks[19]+1] + VVVV2_0_replace + text_copy[linebreaks[26]:]
     return text_copy
 
 def postex_vertex_replacer(working_dir):

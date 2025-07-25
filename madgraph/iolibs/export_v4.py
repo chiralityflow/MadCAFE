@@ -3119,7 +3119,7 @@ CF2PY integer, intent(in) :: new_value
                 if (curr_hel[ones[p]-1:ones[p]] != ' '):
                     left_cor = False
             for q in minushel_list:
-                if (curr_hel[ones[p]:ones[p]+1] != '1'): # ZW: ignore this line if helicity is not +-1
+                if (curr_hel[ones[q]:ones[q]+1] != '1'): # ZW: ignore this line if helicity is not +-1
                     right_cor = False
                     continue
                 if (curr_hel[ones[q]-1:ones[q]] != '-'):
