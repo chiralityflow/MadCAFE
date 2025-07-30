@@ -496,3 +496,31 @@ GC_113 = Coupling(name = 'GC_113',
 GC_114 = Coupling(name = 'GC_114',
                   value = '-(ee**2*complex(0,1))',
                   order = {'QED':1})
+
+# SS: The coupling for vertices with 3 particles containing higgs.
+
+GC_115 = Coupling(name = 'GC_115',
+                  value = '(ee*complex(0,1)*MW/sw)',
+                  order = {'QED':1})
+
+GC_116 = Coupling(name = 'GC_116',
+                  value = '(ee*complex(0,1)*MZ/(sw*cw))',
+                  order = {'QED':1})
+
+GC_117 = Coupling(name = 'GC_117',
+                  value = '-(ee*complex(0,1)*3*MH**2/(2*sw*MW))',
+                  order = {'QED':1})
+
+# SS: The coupling for vertices with 4 particles containing higgs.
+
+GC_118 = Coupling(name = 'GC_118',
+                  value = '(ee**2*complex(0,1)/(2*sw**2))',
+                  order = {'QED':1})
+                  
+GC_119 = Coupling(name = 'GC_119',
+                  value = '(ee**2*complex(0,1)/(2*sw**2*cw**2))',
+                  order = {'QED':1})
+
+GC_120 = Coupling(name = 'GC_120',
+                  value = '-(ee**2*complex(0,1)*3*MH**2/(4*sw**2*MW**2))',
+                  order = {'QED':1})
