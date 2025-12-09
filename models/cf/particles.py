@@ -185,6 +185,38 @@ WM__plus__ = Particle(pdg_code = 80025,
 
 WM__minus__ = WM__plus__.anti()
 
+G0 = Particle(pdg_code = 250,
+              name = 'G0',
+              antiname = 'G0',
+              spin = 1,
+              color = 1,
+              mass = Param.MZ,
+              width = Param.WZ,
+              texname = 'G0',
+              antitexname = 'G0',
+              GoldstoneBoson = True,
+              charge = 0,
+              GhostNumber = 0,
+              LeptonNumber = 0,
+              Y = 0)
+
+G__plus__ = Particle(pdg_code = 251,
+                     name = 'G+',
+                     antiname = 'G-',
+                     spin = 1,
+                     color = 1,
+                     mass = Param.MW,
+                     width = Param.WW,
+                     texname = 'G+',
+                     antitexname = 'G-',
+                     GoldstoneBoson = True,
+                     charge = 1,
+                     GhostNumber = 0,
+                     LeptonNumber = 0,
+                     Y = 0)
+
+G__minus__ = G__plus__.anti()
+
 WZ__plus__ = Particle(pdg_code = 90125,
                      name = 'WZ+',
                      antiname = 'WZ-',
@@ -320,3 +352,17 @@ vmR = Particle(pdg_code = 80014,
               Y = 0)
 
 vmR__tilde__ = vmR.anti()
+
+h = Particle(pdg_code = 25,
+             name = 'h',
+             antiname = 'h',
+             spin = 1,
+             color = 1,
+             mass = Param.MH,
+             width = Param.WH,
+             texname = 'h',
+             antitexname = 'h',
+             charge = 0,
+             GhostNumber = 0,
+             LeptonNumber = 0,
+             Y = 0)

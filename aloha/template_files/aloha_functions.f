@@ -570,8 +570,8 @@ c qketsq = |q] = (qtransconj/sqr0q3, -sqr0q3)
       endif
       pketsq(2) = dcmplx ( - sqp0p3 )
       qketsq(2) = dcmplx ( - sqq0q3 )
-      pbraan(2) = dcmplx( - sqp0p3 )
-      qbraan(2) = dcmplx( - sqq0q3 )
+      pbraan(2) = dcmplx ( - sqp0p3 )
+      qbraan(2) = dcmplx ( - sqq0q3 )
       if ( sqp0p3.eq.rZero ) then
          pketsq(1) = dcmplx( dsqrt(rTwo*pflRot(0)) )
          pbraan(1) = dcmplx( dsqrt(rTwo*pflRot(0)) )
