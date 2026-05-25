@@ -1390,8 +1390,8 @@ class Amplitude(base_objects.PhysicsObject):
                     # ZW: creating vector of tuples for propagators to generalise propagator filtering
                     
                     prop_reduce = [([90022, 90023, 90024], 90022), 
-                                   ([90026, 70026, 80026, 90126, 250], 90026), 
-                                   ([90025, 70025, 80025, 90125, 251], 90025)]
+                                   ([90026, 70026, 80026, 90126], 90026, 250), 
+                                   ([90025, 70025, 80025, 90125], 90025, 251)]
                     
                     leg_ids = [leg[0] for leg in leg_vert_ids]
                     new_leg_vert_ids = []
