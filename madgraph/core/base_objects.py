@@ -3668,6 +3668,22 @@ class Process(PhysicsObject):
                 key = (70013,key[1])
             if (key[0] == -80013):
                 key = (-70013,key[1])
+            if (key[0] == 80025):
+                key = (70025,key[1])
+            if (key[0] == -80025):
+                key = (-70025,key[1])
+            if (key[0] == 80026):
+                key = (70026,key[1])
+            if (key[0] == -80026):
+                key = (-70026,key[1])
+            if (key[0] == 90125):
+                key = (70025,key[1])
+            if (key[0] == -90125):
+                key = (-70025,key[1])
+            if (key[0] == 90126):
+                key = (70026,key[1])
+            if (key[0] == -90126):
+                key = (-70026,key[1])
             if (key[0] == 90024):
                 key = (90023,key[1])
             identical_indices[key] += 1
